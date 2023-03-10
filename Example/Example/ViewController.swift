@@ -252,6 +252,16 @@ class ViewController: UIViewController {
             debugPrint("fetch error assets: \(errorAssets), error indexs: \(errorIndexs)")
         }
         
+        ZLPhotoConfiguration.default().customThumbnailInvalidClass = CThumbCellLimitMaskView.self
+        ZLPhotoConfiguration.default().canSelectAsset { asset in
+            if asset.pixelWidth < 1200 || asset.pixelHeight < 1200 {
+                return false
+            } else {
+                return true
+            }
+        }
+        ZLPhotoUIConfiguration.default().invalidMaskColor(UIColor.white.withAlphaComponent(0.27))
+        
         if preview {
             ac.showPreview(animate: true, sender: self)
         } else {

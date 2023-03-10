@@ -1203,41 +1203,45 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     private func setCellMaskView(_ cell: ZLThumbnailPhotoCell, isSelected: Bool, model: ZLPhotoModel) {
-        cell.coverView.isHidden = true
-        cell.enableSelect = true
+//        cell.coverView.isHidden = true
+//        cell.enableSelect = true
         let arrSel = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
         let config = ZLPhotoConfiguration.default()
         
+        cell.enableSelect = canAddModel(model, currentSelectCount: arrSel.count, sender: self, showAlert: false)
+        cell.coverView.updateMaskStyle(with: model)
+        
         if isSelected {
             cell.coverView.backgroundColor = .zl.selectedMaskColor
-            cell.coverView.isHidden = !config.showSelectedMask
+//            cell.coverView.isHidden = !config.showSelectedMask
             if config.showSelectedBorder {
                 cell.layer.borderWidth = 4
             }
         } else {
-            let selCount = arrSel.count
-            if selCount < config.maxSelectCount {
-                if config.allowMixSelect {
-                    let videoCount = arrSel.filter { $0.type == .video }.count
-                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
-                        cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
-                        cell.enableSelect = false
-                    } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
-                        cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
-                        cell.enableSelect = false
-                    }
-                } else if selCount > 0 {
-                    cell.coverView.backgroundColor = .zl.invalidMaskColor
-                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
-                    cell.enableSelect = model.type != .video
-                }
-            } else if selCount >= config.maxSelectCount {
-                cell.coverView.backgroundColor = .zl.invalidMaskColor
-                cell.coverView.isHidden = !config.showInvalidMask
-                cell.enableSelect = false
-            }
+//            cell.coverView.backgroundColor = .clear
+//            let selCount = arrSel.count
+//            if selCount < config.maxSelectCount {
+//                if config.allowMixSelect {
+//                    let videoCount = arrSel.filter { $0.type == .video }.count
+//                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
+//                        cell.coverView.backgroundColor = .zl.invalidMaskColor
+////                        cell.coverView.isHidden = !config.showInvalidMask
+////                        cell.enableSelect = false
+//                    } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
+//                        cell.coverView.backgroundColor = .zl.invalidMaskColor
+////                        cell.coverView.isHidden = !config.showInvalidMask
+////                        cell.enableSelect = false
+//                    }
+//                } else if selCount > 0 {
+//                    cell.coverView.backgroundColor = .zl.invalidMaskColor
+////                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
+////                    cell.enableSelect = model.type != .video
+//                }
+//            } else if selCount >= config.maxSelectCount {
+//                cell.coverView.backgroundColor = .zl.invalidMaskColor
+////                cell.coverView.isHidden = !config.showInvalidMask
+////                cell.enableSelect = false
+//            }
             if config.showSelectedBorder {
                 cell.layer.borderWidth = 0
             }

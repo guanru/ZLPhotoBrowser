@@ -74,13 +74,19 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         return btn
     }()
     
-    lazy var coverView: UIView = {
-        let view = UIView()
-        view.isUserInteractionEnabled = false
-        view.isHidden = true
-        return view
+//    lazy var coverView: UIView = {
+//        let view = UIView()
+//        view.isUserInteractionEnabled = false
+//        view.isHidden = true
+//        return view
+//    }()
+    lazy var coverView: CCThumbnailLimitMaskProtocol = {
+        guard let customClass = ZLPhotoConfiguration.default().customThumbnailInvalidClass else {
+            return CCThumbnailLimitMaskView()
+        }
+        return customClass.init()
     }()
-    
+        
     lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.layer.cornerRadius = 23.0 / 2
@@ -137,6 +143,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         bottomShadowView.addSubview(descLabel)
         containerView.addSubview(progressView)
         
+        coverView.isUserInteractionEnabled = false
+        
         if ZLPhotoConfiguration.default().showSelectedBorder {
             layer.borderColor = UIColor.zl.selectedBorderColor.cgColor
         }
@@ -185,33 +193,37 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             layer.masksToBounds = true
         }
         
-        if model.type == .video {
-            bottomShadowView.isHidden = false
-            videoTag.isHidden = false
-            livePhotoTag.isHidden = true
-            editImageTag.isHidden = true
-            descLabel.text = model.duration
-        } else if model.type == .gif {
-            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
-            videoTag.isHidden = true
-            livePhotoTag.isHidden = true
-            editImageTag.isHidden = true
-            descLabel.text = "GIF"
-        } else if model.type == .livePhoto {
-            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
-            videoTag.isHidden = true
-            livePhotoTag.isHidden = false
-            editImageTag.isHidden = true
-            descLabel.text = "Live"
+        if coverView.shouldHideAssetTagStyle {
+            bottomShadowView.isHidden = true
         } else {
-            if let _ = model.editImage {
+            if model.type == .video {
                 bottomShadowView.isHidden = false
+                videoTag.isHidden = false
+                livePhotoTag.isHidden = true
+                editImageTag.isHidden = true
+                descLabel.text = model.duration
+            } else if model.type == .gif {
+                bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
                 videoTag.isHidden = true
                 livePhotoTag.isHidden = true
-                editImageTag.isHidden = false
-                descLabel.text = ""
+                editImageTag.isHidden = true
+                descLabel.text = "GIF"
+            } else if model.type == .livePhoto {
+                bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
+                videoTag.isHidden = true
+                livePhotoTag.isHidden = false
+                editImageTag.isHidden = true
+                descLabel.text = "Live"
             } else {
-                bottomShadowView.isHidden = true
+                if let _ = model.editImage {
+                    bottomShadowView.isHidden = false
+                    videoTag.isHidden = true
+                    livePhotoTag.isHidden = true
+                    editImageTag.isHidden = false
+                    descLabel.text = ""
+                } else {
+                    bottomShadowView.isHidden = true
+                }
             }
         }
         

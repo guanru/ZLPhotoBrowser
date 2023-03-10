@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		61ADAAE929BB18C7000EA7E2 /* CThumbCellLimitMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61ADAAE829BB18C7000EA7E2 /* CThumbCellLimitMaskView.swift */; };
 		E42F8ADB25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42F8ADA25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift */; };
 		E44A20F02567763A00FE6CAE /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */; };
 		E462467024EE6F9A00EF6C57 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466F24EE6F9A00EF6C57 /* ImageCell.swift */; };
@@ -131,6 +132,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		61ADAAE829BB18C7000EA7E2 /* CThumbCellLimitMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CThumbCellLimitMaskView.swift; sourceTree = "<group>"; };
 		BAFFA5482773B655007C3811 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Main.strings"; sourceTree = "<group>"; };
 		BAFFA5492773B655007C3811 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		BAFFA54A2773B65B007C3811 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */,
 				E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
+				61ADAAE829BB18C7000EA7E2 /* CThumbCellLimitMaskView.swift */,
 				E4C911A824E283D80061DA40 /* Main.storyboard */,
 				E4C911AB24E283DA0061DA40 /* Assets.xcassets */,
 				E4C911AD24E283DA0061DA40 /* LaunchScreen.storyboard */,
@@ -643,6 +646,7 @@
 				E4A410C424F39F0000EEC20B /* ConstraintAttributes.swift in Sources */,
 				E4A410C524F39F0000EEC20B /* ConstraintViewDSL.swift in Sources */,
 				E4765F83254189E4007B2C0F /* ImageDataProcessor.swift in Sources */,
+				61ADAAE929BB18C7000EA7E2 /* CThumbCellLimitMaskView.swift in Sources */,
 				E4A410C324F39F0000EEC20B /* ConstraintMakerPriortizable.swift in Sources */,
 				E4765F78254189E4007B2C0F /* Kingfisher.swift in Sources */,
 				E4A410D724F39F0000EEC20B /* ConstraintMakerEditable.swift in Sources */,
