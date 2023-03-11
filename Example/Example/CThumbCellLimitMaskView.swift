@@ -11,6 +11,7 @@ import ZLPhotoBrowser
 class CThumbCellLimitMaskView: UIView {
     
     var shouldHideAssetTagStyle: Bool = false
+    var isCellEnableSelect: Bool = true
     
     private lazy var bottomAlertView: UIView = {
         let view = UIView()
@@ -70,10 +71,12 @@ extension CThumbCellLimitMaskView: CCThumbnailLimitMaskProtocol {
             backgroundColor = ZLPhotoUIConfiguration.default().invalidMaskColor
             bottomAlertView.isHidden = false
             shouldHideAssetTagStyle = true
+            isCellEnableSelect = false
         } else {
             backgroundColor = .clear
             bottomAlertView.isHidden = true
             shouldHideAssetTagStyle = false
+            isCellEnableSelect = true
         }
     }
 }

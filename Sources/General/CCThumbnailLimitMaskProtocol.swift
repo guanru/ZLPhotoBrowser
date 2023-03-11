@@ -11,6 +11,8 @@ import UIKit
 public protocol CCThumbnailLimitMaskProtocol: UIView {
     /// Cola: 是否需要隐藏asset类型样式
     var shouldHideAssetTagStyle: Bool { get set }
+    /// Cola: 缩略图cell允许交互
+    var isCellEnableSelect: Bool { get set }
     
     /// 根据图片model更新蒙层样式
     /// - Returns: 返回值控制cell是否允许选中
@@ -25,4 +27,5 @@ extension CCThumbnailLimitMaskProtocol {
 
 public class CCThumbnailLimitMaskView: UIView, CCThumbnailLimitMaskProtocol {
     public var shouldHideAssetTagStyle: Bool = false
+    public var isCellEnableSelect: Bool = false
 }

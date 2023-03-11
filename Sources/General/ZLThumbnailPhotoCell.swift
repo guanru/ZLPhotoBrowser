@@ -192,7 +192,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
             layer.masksToBounds = true
         }
-        
+        enableSelect = coverView.isCellEnableSelect
         if coverView.shouldHideAssetTagStyle {
             bottomShadowView.isHidden = true
         } else {
