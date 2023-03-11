@@ -81,7 +81,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
 //        return view
 //    }()
     lazy var coverView: CCThumbnailLimitMaskProtocol = {
-        guard let customClass = ZLPhotoConfiguration.default().customThumbnailInvalidClass else {
+        guard let customClass = ZLPhotoUIConfiguration.default().customThumbnailInvalidClass else {
             return CCThumbnailLimitMaskView()
         }
         return customClass.init()

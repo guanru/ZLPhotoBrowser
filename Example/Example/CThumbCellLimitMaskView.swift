@@ -14,6 +14,7 @@ class CThumbCellLimitMaskView: UIView {
     
     private lazy var bottomAlertView: UIView = {
         let view = UIView()
+        view.layer.contents = UIImage(named: "zl_shadow")?.cgImage
         view.isHidden = true
         return view
     }()
@@ -67,7 +68,6 @@ extension CThumbCellLimitMaskView: CCThumbnailLimitMaskProtocol {
         print("pixelWidth: \(photoModel.asset.pixelWidth), pixelHeight: \(photoModel.asset.pixelHeight)")
         if photoModel.asset.pixelWidth < 1200 || photoModel.asset.pixelHeight < 1200 {
             backgroundColor = ZLPhotoUIConfiguration.default().invalidMaskColor
-            bottomAlertView.backgroundColor = .red
             bottomAlertView.isHidden = false
             shouldHideAssetTagStyle = true
         } else {

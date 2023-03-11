@@ -226,9 +226,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Whether to use custom camera. Defaults to true.
     @objc public var useCustomCamera = true
     
-    /// Cola: 自定义类型 缩略图无效蒙版
-    public var customThumbnailInvalidClass: CCThumbnailLimitMaskProtocol.Type?
-    
     /// The configuration for camera.
     @objc public var cameraConfiguration = ZLCameraConfiguration()
     

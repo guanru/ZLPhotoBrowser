@@ -108,6 +108,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// The blur effect of the bottom tool bar in the preview interface
     @objc public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
     
+    /// Cola: 自定义类型 缩略图无效蒙版
+    public var customThumbnailInvalidClass: CCThumbnailLimitMaskProtocol.Type?
+    
     // MARK: Image properties
     
     /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.

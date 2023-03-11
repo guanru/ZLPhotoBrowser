@@ -127,6 +127,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func customThumbnailInvalidClass(_ customClass: CCThumbnailLimitMaskProtocol.Type?) -> ZLPhotoUIConfiguration {
+        customThumbnailInvalidClass = customClass
+        return self
+    }
+    
+    @discardableResult
     func customImageNames(_ names: [String]) -> ZLPhotoUIConfiguration {
         customImageNames = names
         return self
