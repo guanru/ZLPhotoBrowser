@@ -1204,7 +1204,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     
     private func setCellMaskView(_ cell: ZLThumbnailPhotoCell, isSelected: Bool, model: ZLPhotoModel) {
 //        cell.coverView.isHidden = true
-//        cell.enableSelect = true
+        cell.enableSelect = true
         let arrSel = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
         let config = ZLPhotoConfiguration.default()
         cell.coverView.updateMaskStyle(with: model)
