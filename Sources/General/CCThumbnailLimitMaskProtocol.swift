@@ -27,5 +27,5 @@ extension CCThumbnailLimitMaskProtocol {
 
 public class CCThumbnailLimitMaskView: UIView, CCThumbnailLimitMaskProtocol {
     public var shouldHideAssetTagStyle: Bool = false
-    public var isCellEnableSelect: Bool = false
+    public var isCellEnableSelect: Bool = true
 }
