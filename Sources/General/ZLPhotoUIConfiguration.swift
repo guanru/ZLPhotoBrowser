@@ -279,6 +279,12 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 相册小图界面底部 `完成` 按钮可交互状态下标题颜色
     @objc public var bottomToolViewDoneBtnNormalTitleColor: UIColor = .white
     
+    /// Cola: 底部最多可选tip字体颜色
+    @objc public var bottomToolViewMaxTipsTitleColor: UIColor = .zl.rgba(51, 51, 51, 1.0)
+    
+    /// Cola: 底部最多可选tip字体
+    @objc public var bottomToolViewMaxTipsTitleFont: UIFont = .systemFont(ofSize: 13.0)
+    
     /// The normal state title color of bottom tool view buttons in preview interface.  Without done button.
     /// 预览大图界面底部按钮可交互状态下标题颜色，不包括 `完成` 按钮
     @objc public var bottomToolViewBtnNormalTitleColorOfPreviewVC: UIColor = .white

@@ -306,6 +306,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func showBottomToolBarMaxTips(_ value: Bool) -> ZLPhotoConfiguration {
+        showBottomToolBarMaxTips = value
+        return self
+    }
+    
+    @discardableResult
     func maxFrameCountForGIF(_ frameCount: Int) -> ZLPhotoConfiguration {
         maxFrameCountForGIF = frameCount
         return self

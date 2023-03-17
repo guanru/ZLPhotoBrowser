@@ -289,6 +289,18 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func bottomToolViewMaxTipsTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        bottomToolViewMaxTipsTitleColor = color
+        return self
+    }
+    
+    @discardableResult
+    func bottomToolViewMaxTipsTitleFont(_ font: UIFont) -> ZLPhotoUIConfiguration {
+        bottomToolViewMaxTipsTitleFont = font
+        return self
+    }
+    
+    @discardableResult
     func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalTitleColorOfPreviewVC = color
         return self

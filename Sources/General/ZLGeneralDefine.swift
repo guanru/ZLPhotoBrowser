@@ -133,8 +133,44 @@ func showAlertController(title: String?, message: String?, style: ZLCustomAlertS
     (sender ?? UIApplication.shared.keyWindow?.rootViewController)?.zl.showAlertController(alert)
 }
 
+func canAddModelCheckSelectCount(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
+    if currentSelectCount >= ZLPhotoConfiguration.default().maxSelectCount {
+        if showAlert {
+            let message = String(format: localLanguageTextValue(.exceededMaxSelectCount), ZLPhotoConfiguration.default().maxSelectCount)
+            showAlertView(message, sender)
+        }
+        return false
+    }
+    if currentSelectCount > 0 {
+        if !ZLPhotoConfiguration.default().allowMixSelect, model.type == .video {
+            return false
+        }
+    }
+    if model.type == .video {
+        if model.second > ZLPhotoConfiguration.default().maxSelectVideoDuration {
+            if showAlert {
+                let message = String(format: localLanguageTextValue(.longerThanMaxVideoDuration), ZLPhotoConfiguration.default().maxSelectVideoDuration)
+                showAlertView(message, sender)
+            }
+            return false
+        }
+        if model.second < ZLPhotoConfiguration.default().minSelectVideoDuration {
+            if showAlert {
+                let message = String(format: localLanguageTextValue(.shorterThanMaxVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
+                showAlertView(message, sender)
+            }
+            return false
+        }
+    }
+    return true
+}
+
 func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
     guard ZLPhotoConfiguration.default().canSelectAsset?(model.asset) ?? true else {
+        if showAlert {
+            let message = "不支持上传"
+            showAlertView(message, sender)
+        }
         return false
     }
     

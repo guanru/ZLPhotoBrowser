@@ -63,6 +63,8 @@ class ZLThumbnailViewController: UIViewController {
     
     private var limitAuthTipsView: ZLLimitedAuthorityTipsView?
     
+    private var tipsLabel: UILabel?
+    
     private lazy var previewBtn: UIButton = {
         let btn = createBtn(localLanguageTextValue(.preview), #selector(previewBtnClick))
         btn.titleLabel?.lineBreakMode = .byCharWrapping
@@ -297,7 +299,9 @@ class ZLThumbnailViewController: UIViewController {
             }
         }
         
-        guard showBottomToolBtns || showLimitAuthTipsView else { return }
+        let showMaxCountTips = ZLPhotoConfiguration.default().showBottomToolBarMaxTips
+        
+        guard showBottomToolBtns || showLimitAuthTipsView || showMaxCountTips else { return }
         
         let btnH = ZLLayout.bottomToolBtnH
         
@@ -329,6 +333,11 @@ class ZLThumbnailViewController: UIViewController {
             
             refreshDoneBtnFrame()
         }
+        
+        if showMaxCountTips {
+            let originY = (doneBtn.frame.size.height - 20) / 2 + doneBtn.frame.origin.y
+            tipsLabel?.frame = CGRect(x: 15.0, y: originY, width: 112, height: 20)
+        }
     }
     
     override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -352,6 +361,15 @@ class ZLThumbnailViewController: UIViewController {
         if showLimitAuthTipsView {
             limitAuthTipsView = ZLLimitedAuthorityTipsView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: ZLLimitedAuthorityTipsView.height))
             bottomView.addSubview(limitAuthTipsView!)
+        }
+        
+        if ZLPhotoConfiguration.default().showBottomToolBarMaxTips,
+           ZLPhotoConfiguration.default().maxSelectCount > 1 {
+            tipsLabel = UILabel()
+            tipsLabel?.textColor = ZLPhotoUIConfiguration.default().bottomToolViewMaxTipsTitleColor
+            tipsLabel?.font = ZLPhotoUIConfiguration.default().bottomToolViewMaxTipsTitleFont
+            tipsLabel?.text = "最多可选\(ZLPhotoConfiguration.default().maxSelectCount)张图片"
+            bottomView.addSubview(tipsLabel!)
         }
         
         bottomView.addSubview(previewBtn)
@@ -1221,10 +1239,10 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                     let videoCount = arrSel.filter { $0.type == .video }.count
                     if videoCount >= config.maxVideoSelectCount, model.type == .video {
                         cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.enableSelect = false
+//                        cell.enableSelect = false
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
                         cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.enableSelect = false
+//                        cell.enableSelect = false
                     }
                 } else if selCount > 0 {
                     cell.coverView.backgroundColor = .zl.invalidMaskColor
@@ -1232,7 +1250,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 }
             } else if selCount >= config.maxSelectCount {
                 cell.coverView.backgroundColor = .zl.invalidMaskColor
-                cell.enableSelect = false
+//                cell.enableSelect = false
             }
             if config.showSelectedBorder {
                 cell.layer.borderWidth = 0

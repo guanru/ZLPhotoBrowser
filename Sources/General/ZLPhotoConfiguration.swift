@@ -242,6 +242,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// Will go to system setting if clicked. Defaults to true.
     @objc public var showEnterSettingTips = true
     
+    /// Cola: 可选最多图片tips 默认展示
+    @objc public var showBottomToolBarMaxTips = true
+    
     /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
     @objc public var maxFrameCountForGIF = 50
     
