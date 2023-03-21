@@ -325,12 +325,15 @@ public class ZLPhotoPreviewSheet: UIView {
         
         let status = PHPhotoLibrary.authorizationStatus()
         if status == .restricted || status == .denied {
-            showNoAuthorityAlert()
+//            showNoAuthorityAlert()
+            sender.view.addSubview(self)
+            showThumbnailViewControllerWithNoPhotoAuth()
         } else if status == .notDetermined {
             PHPhotoLibrary.requestAuthorization { status in
                 ZLMainAsync {
                     if status == .denied {
-                        self.showNoAuthorityAlert()
+//                        self.showNoAuthorityAlert()
+                        self.photoLibraryBtnClick()
                     } else if status == .authorized {
                         if self.preview {
                             self.loadPhotos()
@@ -658,6 +661,25 @@ public class ZLPhotoPreviewSheet: UIView {
                 )
             }
             fetchImageQueue.addOperation(operation)
+        }
+    }
+    
+    private func showThumbnailViewControllerWithNoPhotoAuth() {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        animate = false
+        let nav: ZLImageNavController
+        if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
+            let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
+            nav = self.getImageNav(rootViewController: tvc)
+        } else {
+            nav = self.getImageNav(rootViewController: ZLAlbumListController())
+            let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
+            nav.pushViewController(tvc, animated: true)
+        }
+        if deviceIsiPad() {
+            self.sender?.present(nav, animated: true, completion: nil)
+        } else {
+            self.sender?.showDetailViewController(nav, sender: nil)
         }
     }
     

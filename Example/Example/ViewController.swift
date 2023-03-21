@@ -263,9 +263,8 @@ class ViewController: UIViewController {
         ZLPhotoUIConfiguration.default()
             .invalidMaskColor(UIColor.white.withAlphaComponent(0.37))
             .customThumbnailInvalidClass(CThumbCellLimitMaskView.self)
-            .bottomToolViewBgColor(.white)
             .bottomViewBlurEffectOfAlbumList(UIBlurEffect(style: .light))
-        ZLPhotoConfiguration.default().showEnterSettingTips(false)
+        ZLPhotoConfiguration.default().showEnterSettingTips(true)
         
         if preview {
             ac.showPreview(animate: true, sender: self)

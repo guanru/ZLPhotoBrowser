@@ -61,7 +61,8 @@ class ZLThumbnailViewController: UIViewController {
     
     private var bottomBlurView: UIVisualEffectView?
     
-    private var limitAuthTipsView: ZLLimitedAuthorityTipsView?
+//    private var limitAuthTipsView: ZLLimitedAuthorityTipsView?
+    private var limitAuthTipsView: CZLLimitedAuthorityTipsView?
     
     private var tipsLabel: UILabel?
     
@@ -164,8 +165,7 @@ class ZLThumbnailViewController: UIViewController {
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0)
-        
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .zl.thumbnailBgColor
         view.dataSource = self
@@ -193,6 +193,13 @@ class ZLThumbnailViewController: UIViewController {
     @available(iOS 14, *)
     var showAddPhotoCell: Bool {
         PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton && albumList.isCameraRoll
+    }
+    
+    var hasNoPhotoAuth: Bool {
+        get {
+            let status = PHPhotoLibrary.authorizationStatus()
+            return status == .denied || status == .restricted
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -263,6 +270,9 @@ class ZLThumbnailViewController: UIViewController {
         } else {
             collectionViewInsetTop += navViewNormalH
         }
+        if showLimitAuthTipsView {
+            collectionViewInsetTop += CZLLimitedAuthorityTipsView.height
+        }
         
         let navViewFrame = CGRect(x: 0, y: 0, width: view.frame.width, height: insets.top + navViewNormalH)
         externalNavView?.frame = navViewFrame
@@ -273,19 +283,20 @@ class ZLThumbnailViewController: UIViewController {
         let showBottomToolBtns = shouldShowBottomToolBar()
         
         let bottomViewH: CGFloat
-        if showLimitAuthTipsView, showBottomToolBtns {
-            bottomViewH = ZLLayout.bottomToolViewH + ZLLimitedAuthorityTipsView.height
-        } else if showLimitAuthTipsView {
-            bottomViewH = ZLLimitedAuthorityTipsView.height
-        } else if showBottomToolBtns {
-            bottomViewH = ZLLayout.bottomToolViewH
-        } else {
-            bottomViewH = 0
-        }
+//        if showLimitAuthTipsView, showBottomToolBtns {
+//            bottomViewH = ZLLayout.bottomToolViewH + ZLLimitedAuthorityTipsView.height
+//        } else if showLimitAuthTipsView {
+//            bottomViewH = ZLLimitedAuthorityTipsView.height
+//        } else if showBottomToolBtns {
+//            bottomViewH = ZLLayout.bottomToolViewH
+//        } else {
+//            bottomViewH = 0
+//        }
+        bottomViewH = showBottomToolBtns ? ZLLayout.bottomToolViewH : 0
         
         let totalWidth = view.frame.width - insets.left - insets.right
         collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: view.frame.height)
-        collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 5, bottom: bottomViewH, right: 5)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
         
         if !isLayoutOK {
@@ -299,23 +310,32 @@ class ZLThumbnailViewController: UIViewController {
             }
         }
         
-        let showMaxCountTips = ZLPhotoConfiguration.default().showBottomToolBarMaxTips
+        if showLimitAuthTipsView {
+            limitAuthTipsView?.frame = CGRect(x: 0,
+                                              y: navViewFrame.maxY,
+                                              width: view.bounds.width,
+                                              height: CZLLimitedAuthorityTipsView.height)
+        }
         
-        guard showBottomToolBtns || showLimitAuthTipsView || showMaxCountTips else { return }
+        let showMaxCountTips = ZLPhotoConfiguration.default().showBottomToolBarMaxTips && !hasNoPhotoAuth
+        
+//        guard showBottomToolBtns || showLimitAuthTipsView || showMaxCountTips else { return }
+        guard showBottomToolBtns || showMaxCountTips else { return }
         
         let btnH = ZLLayout.bottomToolBtnH
         
         bottomView.frame = CGRect(x: 0, y: view.frame.height - insets.bottom - bottomViewH, width: view.bounds.width, height: bottomViewH + insets.bottom)
         bottomBlurView?.frame = bottomView.bounds
         
-        if showLimitAuthTipsView {
-            limitAuthTipsView?.frame = CGRect(x: 0, y: 0, width: bottomView.bounds.width, height: ZLLimitedAuthorityTipsView.height)
-        }
+//        if showLimitAuthTipsView {
+//            limitAuthTipsView?.frame = CGRect(x: 0, y: 0, width: bottomView.bounds.width, height: ZLLimitedAuthorityTipsView.height)
+//        }
         
         if showBottomToolBtns {
             let btnMaxWidth = (bottomView.bounds.width - 30) / 3
             
-            let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+//            let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+            let btnY = ZLLayout.bottomToolBtnY
             let previewTitle = localLanguageTextValue(.preview)
             let previewBtnW = previewTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
             previewBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, previewBtnW), height: btnH)
@@ -359,8 +379,10 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if showLimitAuthTipsView {
-            limitAuthTipsView = ZLLimitedAuthorityTipsView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: ZLLimitedAuthorityTipsView.height))
-            bottomView.addSubview(limitAuthTipsView!)
+            limitAuthTipsView = CZLLimitedAuthorityTipsView(frame: .zero)
+//            bottomView.addSubview(limitAuthTipsView!)
+            view.addSubview(limitAuthTipsView!)
+            view.insertSubview(limitAuthTipsView!, aboveSubview: collectionView)
         }
         
         if ZLPhotoConfiguration.default().showBottomToolBarMaxTips,
@@ -481,6 +503,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func shouldShowBottomToolBar() -> Bool {
+        guard !hasNoPhotoAuth else { return false }
         let config = ZLPhotoConfiguration.default()
         let condition1 = config.editAfterSelectThumbnailImage &&
             config.maxSelectCount == 1 &&
@@ -759,7 +782,8 @@ class ZLThumbnailViewController: UIViewController {
         }
         let doneBtnW = doneTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         
-        let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+//        let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+        let btnY = ZLLayout.bottomToolBtnY
         doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
@@ -997,13 +1021,16 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             }
         }
         
-        let totalW = collectionView.bounds.width - CGFloat(columnCount - 1) * uiConfig.minimumInteritemSpacing
+        let totalW = collectionView.bounds.width
+            - CGFloat(columnCount - 1) * uiConfig.minimumInteritemSpacing
+            - collectionView.contentInset.left
+            - collectionView.contentInset.right
         let singleW = totalW / CGFloat(columnCount)
         return CGSize(width: singleW, height: singleW)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrDataSources.count + offset
+        return hasNoPhotoAuth ? 0 : (arrDataSources.count + offset)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -1636,6 +1663,143 @@ class ZLLimitedAuthorityTipsView: UIView {
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
+    }
+    
+}
+
+
+class CZLLimitedAuthorityTipsView: UIView {
+    static let height: CGFloat = 28.0
+    
+    private lazy var tipsLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.color(hexRGB: 0x999999)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.text = "当前仅授权访问部分照片，无法获取全部照片"
+        return label
+    }()
+    
+    private lazy var gotoSettingButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("去设置", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12.0)
+        button.setTitleColor(UIColor.color(hexRGB: 0xED5566), for: .normal)
+        button.backgroundColor = .white
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius  = 2.0
+        button.addTarget(self, action: #selector(actionForGotoSettingButton(_:)), for: .touchUpInside)
+        return button
+    }()
+
+    @objc private func actionForGotoSettingButton(_ button: UIButton) {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.color(hexRGB: 0xF3F3F3)
+        createSubviewsStructure()
+    }
+    
+    override func layoutSubviews() {
+        layoutSubviewsConstraints()
+        super.layoutSubviews()
+    }
+    
+    private func createSubviewsStructure() {
+        addSubview(tipsLabel)
+        addSubview(gotoSettingButton)
+        tipsLabel.translatesAutoresizingMaskIntoConstraints = false
+        gotoSettingButton.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func layoutSubviewsConstraints() {
+        tipsLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        tipsLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0).isActive = true
+        tipsLabel.trailingAnchor.constraint(equalTo: gotoSettingButton.leadingAnchor, constant: -10.0).isActive = true
+        gotoSettingButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        gotoSettingButton.widthAnchor.constraint(equalToConstant: 56.0).isActive = true
+        gotoSettingButton.heightAnchor.constraint(equalToConstant: 18.0).isActive = true
+        gotoSettingButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
+    }
+    
+}
+
+class CZLNoneAuthorityTipsView: UIView {
+    static let height: CGFloat = 28.0
+    
+    private lazy var tipsLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.color(hexRGB: 0x999999)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.text = "当前仅授权访问部分照片，无法获取全部照片"
+        return label
+    }()
+    
+    private lazy var gotoSettingButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setTitle("去设置", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12.0)
+        button.setTitleColor(UIColor.color(hexRGB: 0xED5566), for: .normal)
+        button.backgroundColor = .white
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius  = 2.0
+        button.addTarget(self, action: #selector(actionForGotoSettingButton(_:)), for: .touchUpInside)
+        return button
+    }()
+
+    @objc private func actionForGotoSettingButton(_ button: UIButton) {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.color(hexRGB: 0xF3F3F3)
+        createSubviewsStructure()
+    }
+    
+    override func layoutSubviews() {
+        layoutSubviewsConstraints()
+        super.layoutSubviews()
+    }
+    
+    private func createSubviewsStructure() {
+        addSubview(tipsLabel)
+        addSubview(gotoSettingButton)
+        tipsLabel.translatesAutoresizingMaskIntoConstraints = false
+        gotoSettingButton.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func layoutSubviewsConstraints() {
+        tipsLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        tipsLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0).isActive = true
+        tipsLabel.trailingAnchor.constraint(equalTo: gotoSettingButton.leadingAnchor, constant: -10.0).isActive = true
+        gotoSettingButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        gotoSettingButton.widthAnchor.constraint(equalToConstant: 56.0).isActive = true
+        gotoSettingButton.heightAnchor.constraint(equalToConstant: 18.0).isActive = true
+        gotoSettingButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
     }
     
 }
