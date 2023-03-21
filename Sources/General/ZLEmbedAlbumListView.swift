@@ -29,7 +29,7 @@ import Photos
 
 class ZLEmbedAlbumListView: UIView {
     
-    static let rowH: CGFloat = 60
+    static let rowH: CGFloat = 80
     
     private var selectedAlbum: ZLAlbumListModel
     

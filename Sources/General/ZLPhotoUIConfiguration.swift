@@ -61,7 +61,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Adjust Slider Type
     @objc public var adjustSliderType: ZLAdjustSliderType = .vertical
     
-    @objc public var cellCornerRadio: CGFloat = 0
+    @objc public var cellCornerRadio: CGFloat = 2
     
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?

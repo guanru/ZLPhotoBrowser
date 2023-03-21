@@ -1243,6 +1243,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
                         cell.coverView.backgroundColor = .zl.invalidMaskColor
 //                        cell.enableSelect = false
+                    } else {
+                        cell.coverView.backgroundColor = .clear
                     }
                 } else if selCount > 0 {
                     cell.coverView.backgroundColor = .zl.invalidMaskColor

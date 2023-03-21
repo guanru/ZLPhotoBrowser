@@ -88,12 +88,12 @@ class ZLAlbumListCell: UITableViewCell {
         
         let imageViewX: CGFloat
         if style == .embedAlbumList {
-            imageViewX = 0
+            imageViewX = 10
         } else {
             imageViewX = 12
         }
         
-        coverImageView.frame = CGRect(x: imageViewX, y: 2, width: bounds.height - 4, height: bounds.height - 4)
+        coverImageView.frame = CGRect(x: imageViewX, y: 12, width: bounds.height - 24, height: bounds.height - 24)
         if let m = model {
             let titleW = min(
                 bounds.width / 3 * 2,
