@@ -64,6 +64,8 @@ class ZLThumbnailViewController: UIViewController {
 //    private var limitAuthTipsView: ZLLimitedAuthorityTipsView?
     private var limitAuthTipsView: CZLLimitedAuthorityTipsView?
     
+    private var noneAuthTipsView: CZLNoneAuthorityTipsView?
+    
     private var tipsLabel: UILabel?
     
     private lazy var previewBtn: UIButton = {
@@ -317,6 +319,13 @@ class ZLThumbnailViewController: UIViewController {
                                               height: CZLLimitedAuthorityTipsView.height)
         }
         
+        if hasNoPhotoAuth {
+            noneAuthTipsView?.frame = CGRect(x: (view.bounds.size.width - 277.0) / 2,
+                                             y: (view.bounds.size.height - 87) / 2,
+                                             width: 277.0,
+                                             height: 87.0)
+        }
+        
         let showMaxCountTips = ZLPhotoConfiguration.default().showBottomToolBarMaxTips && !hasNoPhotoAuth
         
 //        guard showBottomToolBtns || showLimitAuthTipsView || showMaxCountTips else { return }
@@ -383,6 +392,12 @@ class ZLThumbnailViewController: UIViewController {
 //            bottomView.addSubview(limitAuthTipsView!)
             view.addSubview(limitAuthTipsView!)
             view.insertSubview(limitAuthTipsView!, aboveSubview: collectionView)
+        }
+        
+        if hasNoPhotoAuth {
+            noneAuthTipsView = CZLNoneAuthorityTipsView(frame: .zero)
+            view.addSubview(noneAuthTipsView!)
+            view.insertSubview(noneAuthTipsView!, aboveSubview: collectionView)
         }
         
         if ZLPhotoConfiguration.default().showBottomToolBarMaxTips,
@@ -1739,13 +1754,20 @@ class CZLLimitedAuthorityTipsView: UIView {
 class CZLNoneAuthorityTipsView: UIView {
     static let height: CGFloat = 28.0
     
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 15.0
+        stack.alignment = .center
+        return stack
+    }()
+    
     private lazy var tipsLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.color(hexRGB: 0x999999)
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 12.0)
-        label.text = "当前仅授权访问部分照片，无法获取全部照片"
+        label.font = UIFont.systemFont(ofSize: 15.0)
         return label
     }()
     
@@ -1753,10 +1775,10 @@ class CZLNoneAuthorityTipsView: UIView {
         let button = UIButton(type: .custom)
         button.setTitle("去设置", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12.0)
-        button.setTitleColor(UIColor.color(hexRGB: 0xED5566), for: .normal)
-        button.backgroundColor = .white
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.color(hexRGB: 0xED5566)
         button.layer.masksToBounds = true
-        button.layer.cornerRadius  = 2.0
+        button.layer.cornerRadius  = 5.0
         button.addTarget(self, action: #selector(actionForGotoSettingButton(_:)), for: .touchUpInside)
         return button
     }()
@@ -1776,8 +1798,9 @@ class CZLNoneAuthorityTipsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.color(hexRGB: 0xF3F3F3)
+        backgroundColor = UIColor.clear
         createSubviewsStructure()
+        setupTipsLabelContent()
     }
     
     override func layoutSubviews() {
@@ -1786,20 +1809,26 @@ class CZLNoneAuthorityTipsView: UIView {
     }
     
     private func createSubviewsStructure() {
-        addSubview(tipsLabel)
-        addSubview(gotoSettingButton)
-        tipsLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stackView)
+        stackView.addArrangedSubview(tipsLabel)
+        stackView.addArrangedSubview(gotoSettingButton)
         gotoSettingButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func layoutSubviewsConstraints() {
-        tipsLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        tipsLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10.0).isActive = true
-        tipsLabel.trailingAnchor.constraint(equalTo: gotoSettingButton.leadingAnchor, constant: -10.0).isActive = true
-        gotoSettingButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        gotoSettingButton.widthAnchor.constraint(equalToConstant: 56.0).isActive = true
-        gotoSettingButton.heightAnchor.constraint(equalToConstant: 18.0).isActive = true
-        gotoSettingButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
+        stackView.frame = bounds
+        gotoSettingButton.widthAnchor.constraint(equalToConstant: 110.0).isActive = true
+        gotoSettingButton.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
     }
     
+    private func setupTipsLabelContent() {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 5.0
+        paragraphStyle.alignment = .center
+        let attributeString = NSMutableAttributedString(string: "请在iPhone的“设置-隐私-照片”选项中,\n允许“婚贝请柬”访问你的手机相册",
+                                                        attributes: [.foregroundColor : UIColor.color(hexRGB: 0x999999),
+                                                                     .font : UIFont.systemFont(ofSize: 15.0),
+                                                                     .paragraphStyle: paragraphStyle])
+        tipsLabel.attributedText = attributeString
+    }
 }
