@@ -1684,7 +1684,7 @@ class ZLLimitedAuthorityTipsView: UIView {
 
 
 class CZLLimitedAuthorityTipsView: UIView {
-    static let height: CGFloat = 28.0
+    static let height: CGFloat = 36.0
     
     private lazy var tipsLabel: UILabel = {
         let label = UILabel()
