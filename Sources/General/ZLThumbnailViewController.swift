@@ -1745,7 +1745,7 @@ class CZLLimitedAuthorityTipsView: UIView {
         tipsLabel.trailingAnchor.constraint(equalTo: gotoSettingButton.leadingAnchor, constant: -10.0).isActive = true
         gotoSettingButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         gotoSettingButton.widthAnchor.constraint(equalToConstant: 56.0).isActive = true
-        gotoSettingButton.heightAnchor.constraint(equalToConstant: 18.0).isActive = true
+        gotoSettingButton.heightAnchor.constraint(equalToConstant: 24.0).isActive = true
         gotoSettingButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
     }
     
