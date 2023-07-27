@@ -309,6 +309,12 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部 `完成` 按钮不可交互状态下标题颜色
     @objc public var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIColor = .zl.rgba(168, 168, 168)
     
+    /// 相册列表界面底部工具栏按钮 可交互 状态文字字体
+    @objc public var bottomToolViewBtnNormalFont: UIFont = ZLLayout.bottomToolTitleFont
+    
+    /// 相册列表界面底部工具栏按钮 不可交互 状态文字字体
+    @objc public var bottomToolViewBtnDisableFont: UIFont = ZLLayout.bottomToolTitleFont
+    
     private var pri_bottomToolViewBtnNormalBgColor: UIColor?
     /// The normal state background color of bottom tool view buttons.
     /// 相册小图界面底部按钮可交互状态下背景色

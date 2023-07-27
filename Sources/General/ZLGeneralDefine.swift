@@ -33,13 +33,13 @@ enum ZLLayout {
     
     static let bottomToolViewH: CGFloat = 55
     
-    static let bottomToolBtnH: CGFloat = 34
+    static let bottomToolBtnH: CGFloat = 33
     
-    static let bottomToolBtnY: CGFloat = 10
+    static let bottomToolBtnY: CGFloat = 16
     
     static let bottomToolTitleFont: UIFont = .zl.font(ofSize: 17)
     
-    static let bottomToolBtnCornerRadius: CGFloat = 5
+    static let bottomToolBtnCornerRadius: CGFloat = 16.5
 }
 
 func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) {

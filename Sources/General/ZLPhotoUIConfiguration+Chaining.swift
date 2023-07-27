@@ -295,6 +295,18 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func bottomToolViewBtnNormalFont(_ font: UIFont) -> ZLPhotoUIConfiguration {
+        bottomToolViewBtnNormalFont = font
+        return self
+    }
+    
+    @discardableResult
+    func bottomToolViewBtnDisableFont(_ font: UIFont) -> ZLPhotoUIConfiguration {
+        bottomToolViewBtnDisableFont = font
+        return self
+    }
+    
+    @discardableResult
     func bottomToolViewMaxTipsTitleFont(_ font: UIFont) -> ZLPhotoUIConfiguration {
         bottomToolViewMaxTipsTitleFont = font
         return self

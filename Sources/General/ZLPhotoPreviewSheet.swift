@@ -140,6 +140,10 @@ public class ZLPhotoPreviewSheet: UIView {
     
     @objc public var cancelBlock: (() -> Void)?
     
+    @objc public var navRightBtn: UIButton?
+    
+    public var needImage: Bool?
+    
     deinit {
         zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
@@ -402,7 +406,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-    private func hide(completion: (() -> Void)? = nil) {
+    public func hide(completion: (() -> Void)? = nil) {
         if animate {
             var frame = baseView.frame
             frame.origin.y += baseViewHeight
@@ -629,6 +633,7 @@ public class ZLPhotoPreviewSheet: UIView {
         var sucCount = 0
         let totalCount = arrSelectedModels.count
         
+        if needImage ?? true {
         for (i, m) in arrSelectedModels.enumerated() {
             let operation = ZLFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
                 guard !timeout else { return }
@@ -662,6 +667,29 @@ public class ZLPhotoPreviewSheet: UIView {
             }
             fetchImageQueue.addOperation(operation)
         }
+        } else {
+            for (i, m) in arrSelectedModels.enumerated() {
+                
+                let isEdited = m.editImage != nil && !config.saveNewImageAfterEdit
+                let model = ZLResultModel(
+                    asset: m.asset,
+                    image: UIImage(),
+                    isEdited: isEdited,
+                    editModel: isEdited ? m.editImageModel : nil,
+                    index: i
+                )
+                results[i] = model
+                
+                sucCount += 1
+                if sucCount >= totalCount {
+                    callback(
+                        results.compactMap { $0 },
+                        errorAssets,
+                        errorIndexs
+                    )
+                }
+            }
+        }
     }
     
     private func showThumbnailViewControllerWithNoPhotoAuth() {
@@ -670,10 +698,12 @@ public class ZLPhotoPreviewSheet: UIView {
         let nav: ZLImageNavController
         if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
             let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
+            tvc.navRightBtn = self.navRightBtn
             nav = self.getImageNav(rootViewController: tvc)
         } else {
             nav = self.getImageNav(rootViewController: ZLAlbumListController())
             let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
+            tvc.navRightBtn = self.navRightBtn
             nav.pushViewController(tvc, animated: true)
         }
         if deviceIsiPad() {
@@ -689,10 +719,12 @@ public class ZLPhotoPreviewSheet: UIView {
             let nav: ZLImageNavController
             if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
                 let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                tvc.navRightBtn = self.navRightBtn
                 nav = self.getImageNav(rootViewController: tvc)
             } else {
                 nav = self.getImageNav(rootViewController: ZLAlbumListController())
                 let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                tvc.navRightBtn = self.navRightBtn
                 nav.pushViewController(tvc, animated: true)
             }
             if deviceIsiPad() {
