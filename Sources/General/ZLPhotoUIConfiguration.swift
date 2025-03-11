@@ -458,6 +458,9 @@ enum ZLCustomImageDeploy {
     
     /// The display relationship between the album list and the thumbnail interface is push.
     case externalAlbumList
+    
+    /// 编辑器内的弹窗样式
+    case editorPopAlbumList
 }
 
 /// Language deploy

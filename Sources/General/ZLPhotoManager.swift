@@ -172,15 +172,18 @@ public class ZLPhotoManager: NSObject {
         if !allowSelectVideo {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        
-        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        smartAlbums.enumerateObjects { collection, _, stop in
-            if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                let result = PHAsset.fetchAssets(in: collection, options: option)
-                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
-                completion(albumModel)
-                stop.pointee = true
-            }
+//        DispatchQueue.global().async {
+            let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+            smartAlbums.enumerateObjects { collection, _, stop in
+                if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
+//                    DispatchQueue.main.async {
+                        let result = PHAsset.fetchAssets(in: collection, options: option)
+                        let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
+                        completion(albumModel)
+                        stop.pointee = true
+//                    }
+                }
+//            }
         }
     }
     

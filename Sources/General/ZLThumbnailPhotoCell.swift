@@ -178,7 +178,6 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         }
         
         selectedBlock?(btnSelect.isSelected)
-        
         if btnSelect.isSelected {
             fetchBigImage()
         } else {

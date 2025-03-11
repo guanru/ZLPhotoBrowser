@@ -29,13 +29,13 @@ import Photos
 
 extension ZLThumbnailViewController {
     
-    private enum SlideSelectType {
+    enum SlideSelectType {
         case none
         case select
         case cancel
     }
     
-    private enum AutoScrollDirection {
+    enum AutoScrollDirection {
         case none
         case top
         case bottom
@@ -1105,6 +1105,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                     nav?.arrSelectedModels.append(model)
                     cell?.btnSelect.isSelected = true
                     self?.refreshCellIndexAndMaskView()
+                    
                     if config.maxSelectCount == 1, !config.allowPreviewPhotos {
                         self?.doneBtnClick()
                     }
@@ -1166,7 +1167,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = cell as? ZLThumbnailPhotoCell else {
             return
         }
-        
+   
         let config = ZLPhotoConfiguration.default()
         
         if !config.allowPreviewPhotos {
@@ -1385,13 +1386,13 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
 
 class ZLEmbedAlbumListNavView: UIView {
     
-    private static let titleViewH: CGFloat = 32
+    static let titleViewH: CGFloat = 32
     
-    private static let arrowH: CGFloat = 14
+    static let arrowH: CGFloat = 14
     
-    private var navBlurView: UIVisualEffectView?
+    var navBlurView: UIVisualEffectView?
     
-    private lazy var titleBgControl: UIControl = {
+    lazy var titleBgControl: UIControl = {
         let control = UIControl()
         control.backgroundColor = .zl.navEmbedTitleViewBgColor
         control.layer.cornerRadius = ZLEmbedAlbumListNavView.titleViewH / 2
@@ -1400,7 +1401,7 @@ class ZLEmbedAlbumListNavView: UIView {
         return control
     }()
     
-    private lazy var albumTitleLabel: UILabel = {
+    lazy var albumTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .zl.navTitleColor
         label.font = ZLLayout.navTitleFont
@@ -1409,14 +1410,14 @@ class ZLEmbedAlbumListNavView: UIView {
         return label
     }()
     
-    private lazy var arrow: UIImageView = {
+    lazy var arrow: UIImageView = {
         let view = UIImageView(image: .zl.getImage("zl_downArrow"))
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFit
         return view
     }()
     
-    private lazy var cancelBtn: UIButton = {
+    lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
         if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
             btn.titleLabel?.font = ZLLayout.navTitleFont
@@ -1476,7 +1477,7 @@ class ZLEmbedAlbumListNavView: UIView {
         }
     }
     
-    private func refreshTitleViewFrame() {
+    func refreshTitleViewFrame() {
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, *) {
             insets = safeAreaInsets
@@ -1524,7 +1525,7 @@ class ZLEmbedAlbumListNavView: UIView {
         addSubview(cancelBtn)
     }
     
-    @objc private func titleBgControlClick() {
+    @objc func titleBgControlClick() {
         selectAlbumBlock?()
         if arrow.transform == .identity {
             UIView.animate(withDuration: 0.25) {

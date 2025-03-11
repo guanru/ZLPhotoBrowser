@@ -28,7 +28,9 @@ import UIKit
 import Photos
 
 public class ZLPhotoPreviewSheet: UIView {
-    
+    // 是否自动退出vc, 默认true
+    public var isAutoDismiss: Bool = true
+
     private enum Layout {
         static let colH: CGFloat = 155
         
@@ -139,6 +141,8 @@ public class ZLPhotoPreviewSheet: UIView {
     @objc public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
     
     @objc public var cancelBlock: (() -> Void)?
+    
+    @objc public var popWillShowBlock: ((UIView) -> Void)?
     
     @objc public var navRightBtn: UIButton?
     
@@ -394,7 +398,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         if animate {
-            backgroundColor = .zl.previewBgColor.withAlphaComponent(0)
+            backgroundColor = .zl.previewBgColor.withAlphaComponent(1)
             var frame = baseView.frame
             frame.origin.y = bounds.height
             baseView.frame = frame
@@ -612,7 +616,12 @@ public class ZLPhotoPreviewSheet: UIView {
             if let vc = viewController {
                 self?.isHidden = true
                 self?.animate = false
-                vc.dismiss(animated: true) {
+                if self?.isAutoDismiss == true {
+                    vc.dismiss(animated: true) {
+                        call()
+                        self?.hide()
+                    }
+                } else {
                     call()
                     self?.hide()
                 }
@@ -695,35 +704,21 @@ public class ZLPhotoPreviewSheet: UIView {
     private func showThumbnailViewControllerWithNoPhotoAuth() {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
         animate = false
-        let nav: ZLImageNavController
-        if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
-            let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
-            tvc.navRightBtn = self.navRightBtn
-            nav = self.getImageNav(rootViewController: tvc)
+        let listModel = ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true)
+        if ZLPhotoUIConfiguration.default().style == .editorPopAlbumList {
+            let pop = EditorImagePickerPop(albumList: listModel)
+            pop.selectedBlock = self.selectImageBlock
+            pop.willShowBlock = self.popWillShowBlock
+            pop.show()
         } else {
-            nav = self.getImageNav(rootViewController: ZLAlbumListController())
-            let tvc = ZLThumbnailViewController(albumList: ZLAlbumListModel(title: "最近项目", result: PHFetchResult(), collection: PHAssetCollection(), option: PHFetchOptions(), isCameraRoll: true))
-            tvc.navRightBtn = self.navRightBtn
-            nav.pushViewController(tvc, animated: true)
-        }
-        if deviceIsiPad() {
-            self.sender?.present(nav, animated: true, completion: nil)
-        } else {
-            self.sender?.showDetailViewController(nav, sender: nil)
-        }
-    }
-    
-    private func showThumbnailViewController() {
-        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] cameraRoll in
-            guard let `self` = self else { return }
             let nav: ZLImageNavController
             if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                let tvc = ZLThumbnailViewController(albumList: listModel)
                 tvc.navRightBtn = self.navRightBtn
                 nav = self.getImageNav(rootViewController: tvc)
             } else {
                 nav = self.getImageNav(rootViewController: ZLAlbumListController())
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                let tvc = ZLThumbnailViewController(albumList: listModel)
                 tvc.navRightBtn = self.navRightBtn
                 nav.pushViewController(tvc, animated: true)
             }
@@ -731,6 +726,35 @@ public class ZLPhotoPreviewSheet: UIView {
                 self.sender?.present(nav, animated: true, completion: nil)
             } else {
                 self.sender?.showDetailViewController(nav, sender: nil)
+            }
+        }
+    }
+    
+    private func showThumbnailViewController() {
+        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] cameraRoll in
+            guard let `self` = self else { return }
+            if ZLPhotoUIConfiguration.default().style == .editorPopAlbumList {
+                let pop = EditorImagePickerPop(albumList: cameraRoll)
+                pop.selectedBlock = self.selectImageBlock
+                pop.willShowBlock = self.popWillShowBlock
+                pop.show()
+            } else {
+                let nav: ZLImageNavController
+                if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
+                    let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                    tvc.navRightBtn = self.navRightBtn
+                    nav = self.getImageNav(rootViewController: tvc)
+                } else {
+                    nav = self.getImageNav(rootViewController: ZLAlbumListController())
+                    let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                    tvc.navRightBtn = self.navRightBtn
+                    nav.pushViewController(tvc, animated: true)
+                }
+                if deviceIsiPad() {
+                    self.sender?.present(nav, animated: true, completion: nil)
+                } else {
+                    self.sender?.showDetailViewController(nav, sender: nil)
+                }
             }
         }
     }
