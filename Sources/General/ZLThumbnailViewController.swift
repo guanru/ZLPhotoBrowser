@@ -29,7 +29,7 @@ import Photos
 
 extension ZLThumbnailViewController {
     
-    private enum SlideSelectType {
+    enum SlideSelectType {
         case none
         case select
         case cancel
@@ -1670,7 +1670,7 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
 
 class ZLEmbedAlbumListNavView: UIView {
     
-    private static let titleViewH: CGFloat = 32
+    static let titleViewH: CGFloat = 32
     
     static let arrowH: CGFloat = 14
     
