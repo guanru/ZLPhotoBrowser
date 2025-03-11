@@ -27,9 +27,8 @@
 import UIKit
 import Photos
 
-public class ZLImageNavController: UINavigationController {
-    
-    var isSelectedOriginal: Bool = false
+class ZLImageNavController: UINavigationController {
+    var isSelectedOriginal = false
     
     var arrSelectedModels: [ZLPhotoModel] = []
     
@@ -67,5 +66,4 @@ public class ZLImageNavController: UINavigationController {
 
         // Do any additional setup after loading the view.
     }
-    
 }

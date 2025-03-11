@@ -1,10 +1,10 @@
 //
-//  Kingfisher.h
-//  Kingfisher
+//  UIGraphicsImageRenderer+ZLPhotoBrowser.swift
+//  ZLPhotoBrowser
 //
-//  Created by Wei Wang on 15/4/6.
+//  Created by long on 2023/11/23.
 //
-//  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
+//  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+import UIKit
 
-//! Project version number for Kingfisher.
-FOUNDATION_EXPORT double KingfisherVersionNumber;
-
-//! Project version string for Kingfisher.
-FOUNDATION_EXPORT const unsigned char KingfisherVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <Kingfisher/PublicHeader.h>
-
-
+extension ZLPhotoBrowserWrapper where Base: UIGraphicsImageRenderer {
+    static func renderImage(
+        size: CGSize,
+        formatConfig: ((UIGraphicsImageRendererFormat) -> Void)? = nil,
+        imageActions: ((CGContext) -> Void)
+    ) -> UIImage {
+        let format: UIGraphicsImageRendererFormat
+        if #available(iOS 11.0, *) {
+            format = .preferred()
+        } else {
+            format = .default()
+        }
+        formatConfig?(format)
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { context in
+            imageActions(context.cgContext)
+        }
+    }
+}

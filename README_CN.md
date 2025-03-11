@@ -1,9 +1,10 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
+[![Version](https://img.shields.io/github/v/tag/longitachi/ZLPhotoBrowser.svg?color=blue&include_prereleases=&sort=semver)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
+[![License](https://img.shields.io/badge/license-MIT-black)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
+[![Usage](https://img.shields.io/badge/Usage-Doc-yarn?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki/How-to-use-(Swift))
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
@@ -34,9 +35,8 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 
 如果你仅想使用图片编辑功能，请移步[ZLImageEditor](https://github.com/longitachi/ZLImageEditor)
 
-### <a id="功能介绍"></a>功能介绍
+### 功能介绍
 你想要的应有尽有，部分功能如下，更多功能请查看 `ZLPhotoConfiguration` 中的参数定义（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
-- [x] 适配 iOS14
 - [x] 支持横竖屏
 - [x] 自选框架样式
 - [x] 预览快速选择（支持拖拽选择，效果参照QQ）
@@ -59,12 +59,12 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 
 > 如果你在使用中有好的需求及建议，或者遇到什么bug，欢迎随时issue，我会及时的回复
  
-### <a id="框架支持"></a>框架支持
+### 框架支持
  * iOS 10.0
  * Swift 5.x
  * Xcode 12.x
  
-### <a id="使用示例"></a>使用示例
+### 使用示例
  - 快速选择
  ```
  let ps = ZLPhotoPreviewSheet()
@@ -99,39 +99,36 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
  ```
  
  
-### <a id="更新日志"></a>更新日志
+### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.3.9
+● 4.5.8
   Add:
-    支持自定义小图界面的行间距、列间距及列的数量;
-    将相机相关的配置从ZLPhotoConfiguration移动到ZLCameraConfiguration;
-    更新相机界面UI样式;
-    支持拍照后直接回调;
-    贴纸增加最大放大比例;
-● 4.3.8
-  Add:
-    支持当最大选择数为1时，点击小图后直接选择完成.
-    调整图片滑动条添加横滑样式.
+    自定义相机支持开启防抖模式。
   Fix:
-    修复合并视频时尺寸错误的bug.
-    修复滤镜和调整图片时，redo按钮没有隐藏的bug.
-● 4.3.7
+    修复自定义相机广角模式闪光灯无法开启的bug。
+    修复预览网络视频时卡顿的问题。
+    修复图片编辑器界面内存泄漏的问题。
+    无相册权限时，再次点击相册不再显示引导开启权限弹窗（苹果审核政策要求）。
+    修复图片裁剪后，涂鸦橡皮擦工具在涂抹时，UI显示错位的bug。
+● 4.5.7
   Add:
-    修改selectImageBlock回调参数为ZLResultModel, 删除shouldAnialysisAsset参数;
-    图片编辑器界面适配iPad;
-    支持阿拉伯语;
-    涂鸦和马赛克支持反撤销;
-    支持修改图片编辑器中icon的tint color;
-  Fix:
-    修复编辑视频时获取视频版本错误的bug.
+    自定义相机支持点击后保持录像模式。
+    自定义相机在iOS13以上系统支持广角摄像头。
+    自定义相机支持添加自定义遮罩层。
+    视频编辑控制器添加取消编辑的回调block。
+    新增ZLImagePreviewControllerDelegate协议，接收ZLImagePreviewController中的事件回调。
+● 4.5.6
+  Add:
+    支持iOS18。
+    保存图片和视频的回调里添加error参数。
 ...
 ```
 
-### <a id="国际化语言"></a>国际化语言
+### 国际化语言
 🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩 印度尼西亚语, 🇪🇸 西班牙语, 🇵🇹 葡萄牙语, 🇹🇷 土耳其语, 🇸🇦 阿拉伯语.
 
-### <a id="安装方法"></a>使用方法
+### 安装方法
 
 * Manually 
   * 1.直接把`Sources`文件夹拖入到你的工程中
@@ -152,11 +149,11 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   * 2. 输入对应版本号（SPM 最低版本为 `4.0.9`）
   * 3. 等Xcode下载完成后确定即可
 
-### <a id="支持"></a> 支持
+### 支持
 * 给个[**★ Star**](#)
 * 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ap.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wp.png" width = "100" height = "125" />  or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/pp.png" width = "150" height = "125" />
 
-### <a id="效果图"></a> 效果图
+### 效果图
 - 选择
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9.gif)
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/%E7%9B%B8%E5%86%8C%E5%86%85%E9%83%A8%E9%80%89%E6%8B%A9.gif)
